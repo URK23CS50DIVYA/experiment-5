@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quiz App with Timer</title>
+<style>
+    body {
+        font-family: Arial;
+        padding: 20px;
+    }
+    .question {
+        background: #f2f2f2;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    #timer {
+        font-size: 22px;
+        font-weight: bold;
+        color: red;
+        margin-bottom: 20px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Quiz App (10 Seconds)</h2>
+<div id="timer">Time Left: 10s</div>
+<div id="warning" style="color:orange; font-weight:bold;"></div>
+
+<form id="quizForm">
+
+    <div class="question">
+        <p>1. Which language runs in a web browser?</p>
+        <input type="radio" name="q1" value="JS"> JavaScript<br>
+        <input type="radio" name="q1" value="C"> C<br>
+        <input type="radio" name="q1" value="Java"> Java<br>
+    </div>
+
+    <div class="question">
+        <p>2. What does CSS stand for?</p>
+        <input type="radio" name="q2" value="Cascading"> Cascading Style Sheets<br>
+        <input type="radio" name="q2" value="Color"> Color Switching System<br>
+    </div>
+
+    <div class="question">
+        <p>3. What is the correct extension for JavaScript?</p>
+        <input type="radio" name="q3" value=".js"> .js<br>
+        <input type="radio" name="q3" value=".java"> .java<br>
+    </div>
+
+    <div class="question">
+        <p>4. Which HTML tag is used for JavaScript?</p>
+        <input type="radio" name="q4" value="script">&lt;script&gt;<br>
+        <input type="radio" name="q4" value="js">&lt;js&gt;<br>
+    </div>
+
+    <div class="question">
+        <p>5. JavaScript is ______</p>
+        <input type="radio" name="q5" value="Language"> A programming language<br>
+        <input type="radio" name="q5" value="Markup"> A markup language<br>
+    </div>
+
+    <button type="button" onclick="submitQuiz()">Submit</button>
+</form>
+
+<h2 id="score"></h2>
+
+<script>
+let timeLeft = 10;
+let timerDisplay = document.getElementById("timer");
+let warning = document.getElementById("warning");
+
+let countdown = setInterval(() => {
+    timeLeft--;
+
+    timerDisplay.innerHTML = "Time Left: " + timeLeft + "s";
+
+    if (timeLeft === 5) {
+        warning.innerHTML = "Only 5 seconds remaining!";
+    }
+
+    if (timeLeft <= 0) {
+        clearInterval(countdown);
+        submitQuiz();
+    }
+}, 1000);
+
+const correctAnswers = {
+    q1: "JS",
+    q2: "Cascading",
+    q3: ".js",
+    q4: "script",
+    q5: "Language"
+};
+
+
+function submitQuiz() {
+
+    clearInterval(countdown);
+    warning.innerHTML = "";
+    timerDisplay.innerHTML = "Time Over!";
+
+    let score = 0;
+
+    for (let key in correctAnswers) {
+        let answer = document.querySelector('input[name="' + key + '"]:checked');
+        if (answer && answer.value === correctAnswers[key]) {
+            score++;
+        }
+    }
+
+    document.getElementById("score").innerHTML = "Final Score: " + score + "/5";
+
+    // disable all radio buttons
+    let allOptions = document.querySelectorAll("input[type='radio']");
+    allOptions.forEach(opt => opt.disabled = true);
+}
+</script>
+
+</body>
+</html>
